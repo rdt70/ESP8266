@@ -1,3 +1,0 @@
-this is a text file created and edited on github web
-xxxx this line has been added from the web
-yyyy this is another line added on master
