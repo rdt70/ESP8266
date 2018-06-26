@@ -113,6 +113,7 @@ String pageHead() {
 	htmlHead += ".buttonON { background-color: #f44336; border: none; color: white; padding: 15px 32px; text-decoration: none; font-size: 16px; margin: 2px; cursor: pointer;}";
 	htmlHead += ".buttonOFF {background-color: #4CAF50;}";
 	htmlHead += "</style>";
+	htmlHead += "<meta http-equiv=\"refresh\" content=\"5\">";
 	htmlHead += "</head>";
 	
 	return htmlHead;
