@@ -141,14 +141,15 @@ String pageButton(String pinName, int OnOff) {
 } // pageButton
 
 String clientAction(String header, String pinOut)  {
+// Include here any action required on specific input from client
 	String outputState = ""; 
 
 	if (header.indexOf("GET /" + pinOut +"/ON") >= 0) {
-        Serial.println("GPIO D1 ON");
+        Serial.println(pinOut + " ON");
         outputState = "ON";
 	}
 	if (header.indexOf("GET /" + pinOut +"/OFF") >= 0) {
-        Serial.println("GPIO D1 OFF");
+        Serial.println(pinOut + " OFF");
         outputState = "OFF";
 	}
 	return outputState;
@@ -192,9 +193,9 @@ void webServerListen() {
             // Web Page Heading
             client.println("<body><h1>ESP8266 Web Server</h1>");
             
-			      client.println(pageButton("D1", !digitalRead(D1)));
-			      client.println(pageButton("D2", !digitalRead(D2)));
-			      client.println(pageButton("D3", !digitalRead(D3)));
+	    client.println(pageButton("D1", !digitalRead(D1))); 
+	    client.println(pageButton("D2", !digitalRead(D2)));
+	    client.println(pageButton("D3", !digitalRead(D3)));
 			
             client.println("</body></html>");
             
