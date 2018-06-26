@@ -191,7 +191,7 @@ void webServerListen() {
             client.println(pageHead());
                         		
             // Web Page Heading
-            client.println("<body><h1>ESP8266 Web Server</h1>");
+            client.println("<body><h1>EURO5K Alarm Web Server</h1>");
             
 	    client.println(pageButton("D1", !digitalRead(D1))); 
 	    client.println(pageButton("D2", !digitalRead(D2)));
