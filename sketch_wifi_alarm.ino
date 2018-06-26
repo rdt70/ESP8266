@@ -28,9 +28,9 @@ WiFiServer server(80);
 // Variable to store the HTTP request
 String header;
   
-const int AlarmIntrusionPin  = D1; // -> Centrale Morsetto 26 [NA]   - Riposo/Allarme = Appeso/Massa => INPUT_PULLUP 
-const int AlarmArmedPin   = D2; // -> Centrale Morsetto 32 [+OFF] - Riposo/Inserita = 12v/Appeso => INPUT (con partitore)
-const int AlarmFailurePin = D3; // -> Centrale Morsetto 22 [OUT ] - Riposo/Guasto = Appeso/Massa => INPUT_PULLUP
+const int AlarmIntrusionPin  = D1; 	// -> To alarm connector 26 [NA] - OnSleep/OnAlarm = Not connected/Ground => INPUT_PULLUP 
+const int AlarmArmedPin   = D2; 	// -> To alarm connector 32 [+OFF] - OnSleep/Armed = 12v/Not Connected => INPUT (with voltage divider)
+const int AlarmFailurePin = D3; 	// -> To alarm connector 22 [OUT ] - OnSleep/OnFailure = Not connected/Ground => INPUT_PULLUP
 const int led = D4;     
 bool armedSent = 0;
 bool alarmSent = 0;
@@ -47,9 +47,9 @@ void setup() {
   server.begin();
 
   // define pinmode
-  pinMode(AlarmIntrusionPin, INPUT_PULLUP);	// massa se attivo 
-  pinMode(AlarmArmedPin, INPUT_PULLUP);  	// Appeso se inserito (richiede partitore) - INPUT con PULLUP solo per prova
-  pinMode(AlarmFailurePin, INPUT_PULLUP); 	// massa se attivo
+  pinMode(AlarmIntrusionPin, INPUT_PULLUP);	// To ground if active (intrusion detected)
+  pinMode(AlarmArmedPin, INPUT);  		// Not connected if active (require external voltage divider) => INPUT
+  pinMode(AlarmFailurePin, INPUT_PULLUP); 	// To ground if active (failure detected)
   pinMode(led, OUTPUT);
 
   
