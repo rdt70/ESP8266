@@ -221,8 +221,8 @@ void webServerListen() {
 } // webServerListen
 
 
-// ======================= Blink Led ============================
-void blinkLed() {
+// ======================= Check the Alarm Status ============================
+void checkAlarm() {
   // put your main code here, to run repeatedly:
 
   digitalWrite(led, LOW);
@@ -277,7 +277,7 @@ void blinkLed() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  blinkLed();
+  checkAlarm();
   
   delay(2000);
 
