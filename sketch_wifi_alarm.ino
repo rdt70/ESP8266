@@ -235,20 +235,21 @@ void checkAlarm() {
   bool Failure  = !digitalRead(AlarmFailurePin);
 
   Serial.print("PIN D1 = "); Serial.print(!OnAlarm);
-  //============= Controllo se in allarme
+  
+  //============= Check if alarm raised
   if (OnAlarm && !alarmSent) {
         Serial.println("Centrale ALLARME!");
         sendAlarmtoIFTTT(IFTTT_Event_Alarm);
-         alarmSent = 1; //ricorda che ha già inviato una segnalazione per non mandarla più
+         alarmSent = 1;  //Remember if already sent to avoid sending twice
   } else { alarmSent = OnAlarm; } // alarmSent = 0 se non allarme altrimenti rimane 1
   Serial.println();
 
-  //============= Controllo se centrale inserita
+  //============= Check if alarm armed
   Serial.print("PIN D2 = "); Serial.print(!Armed);
   if (Armed && !armedSent) {
        Serial.println("Centrale Inserita!");
       sendAlarmtoIFTTT(IFTTT_Event_Armed); 
-      armedSent = 1;   //ricorda che ha già inviato una segnalazione per non mandarla più
+      armedSent = 1;    //Remember if already sent to avoid sending twice
   } else {
       if (!Armed && armedSent) {
           Serial.println("Centrale Disinserita!");
@@ -258,12 +259,12 @@ void checkAlarm() {
   }
   Serial.println();
   
-  //============= Controllo se in failure es per mancanza di corrente
+  //============= Check if failure (for example if no power)
   Serial.print("PIN D3 = "); Serial.print(!Failure);
   if (Failure && !failureSent) {
         Serial.println("FAILURE!");
         sendAlarmtoIFTTT(IFTTT_Event_Failure); 
-        failureSent = 1; //ricorda che ha già inviato una segnalazione per non mandarla più
+        failureSent = 1; //Remember if already sent to avoid sending twice
   } else {
     failureSent = Failure;   //da ora si può mandare nuova segnalazione
   }
