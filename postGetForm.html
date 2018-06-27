@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 	<style>
@@ -8,8 +9,12 @@
 
 <body>
 
+<p>Parameters sent as: /Configuration?ID1=Value1&ID2=Value2&ID3=Value3</p>
+
 <h1>Configuration Page</h1>
-<form action="/action_page.php" method="get">
+<form action="/Configuration" method="get">
+<fieldset>
+    <legend>Configuration:</legend>
   <div>
     <label for="wifi_ssid">WiFi SSID:</label>
     <input name="wifi_ssid" id="wifi_ssid" value="ssid_here">
@@ -22,6 +27,7 @@
     <label for="IFTTT_Key">IFTTT Key:</label>
     <input name="IFTTT_Key" id="IFTTT_Key" value="IFTTT_Key_here">
   </div>
+ </fieldset>
   <div>
 	<br><br>
     <button type="submit" value="Submit">Submit</button>
