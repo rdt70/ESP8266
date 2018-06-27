@@ -90,14 +90,14 @@ void sendAlarmtoIFTTT (String event) {
   	client.print(String("GET ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
   	/*
 	Example of POST data
-	String PostData = "param1Name=param1Value&param2Name=param2Value&param3Name=param3Value"; //Parameters here
+	String PostData = "value1=192.168.1.1&value2=param2Value&value3=param3Value"; //Parameters here
 	// client.println("POST /posts HTTP/1.1");
 	// client.println("Host: jsonplaceholder.typicode.com");
 	client.print(String("POST ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n")
 	client.println("Cache-Control: no-cache");
 	client.println("Content-Type: application/x-www-form-urlencoded");
-	client.print("Content-Length: ");
-	client.println(PostData.length());
+	client.print("Content-Length: ");  //forse non serve
+	client.println(PostData.length()); //forse non serve
 	client.println();
 	client.println(PostData);
 	*/
@@ -152,16 +152,16 @@ String pageButton(String pinName, int OnOff) {
 	
 } // pageButton
 
-String clientAction(String header, String pinOut)  {
+String clientAction(String header, String action)  {
 // Include here any action required on specific input from client
 	String outputState = ""; 
 
-	if (header.indexOf("GET /" + pinOut +"/ON") >= 0) {
-        Serial.println(pinOut + " ON");
+	if (header.indexOf("GET /" + action +"/ON") >= 0) {
+        Serial.println(action + " ON");
         outputState = "ON";
 	}
-	if (header.indexOf("GET /" + pinOut +"/OFF") >= 0) {
-        Serial.println(pinOut + " OFF");
+	if (header.indexOf("GET /" + action +"/OFF") >= 0) {
+        Serial.println(action + " OFF");
         outputState = "OFF";
 	}
 	return outputState;
@@ -195,9 +195,9 @@ void webServerListen() {
             client.println();
             
 	     // Analize the client query
-			Serial.println(clientAction(header,"D1")); // Do some action here instead of print...
-			Serial.println(clientAction(header,"D2")); // Do some action here instead of print...
-			Serial.println(clientAction(header,"D3")); // Do some action here instead of print...
+			Serial.println(clientAction(header,"button1")); // Do some action here instead of print...
+			Serial.println(clientAction(header,"button2")); // Do some action here instead of print...
+			Serial.println(clientAction(header,"button3")); // Do some action here instead of print...
 			
             // Display the HTML web page
             client.println(pageHead());
