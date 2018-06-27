@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-# ESP8266
-this is readme.md
-changest done in develop branch
-
-Sto aggiungendo una riga
-e ancora un'altra
-=======
 ## ESP8266 NodeMcu Alarm info
 ESP NodeMcu as alarm info detection and sharing on IFTTT. (require IFTTT account and a WebHook + Alarm item)
 Also it expose the pin status on a web server. First 3 pins used.
@@ -20,4 +12,3 @@ NOTE: the simple wifi client and server has been used instead of HTTP class beca
 ![Web Server](https://github.com/rdt70/ESP8266/blob/master/Images/EURO5K.png)
 
 
->>>>>>> master
