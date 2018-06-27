@@ -86,12 +86,23 @@ void sendAlarmtoIFTTT (String event) {
     		return;
   	}
   	Serial.println("Connection Established");
-    // Serial.println(urlIFTTT);
-  	// This will send the request to the server
-  	client.print(String("GET ") + urlIFTTT + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" + 
-               "Connection: close\r\n\r\n");
-  	delay(10);
+  	// This will send the request to the server [to replace with POST to pass IP]
+  	client.print(String("GET ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
+  	/*
+	Example of POST data
+	String PostData = "param1Name=param1Value&param2Name=param2Value&param3Name=param3Value"; //Parameters here
+	// client.println("POST /posts HTTP/1.1");
+	// client.println("Host: jsonplaceholder.typicode.com");
+	client.print(String("POST ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n")
+	client.println("Cache-Control: no-cache");
+	client.println("Content-Type: application/x-www-form-urlencoded");
+	client.print("Content-Length: ");
+	client.println(PostData.length());
+	client.println();
+	client.println(PostData);
+	*/
+	
+	delay(10);
 
   	// Read all the lines of the reply from server and print them to Serial
   	while(client.available()){
@@ -184,9 +195,9 @@ void webServerListen() {
             client.println();
             
 	     // Analize the client query
-		Serial.println(clientAction(header,"D1")); // Do some action here instead of print...
-	     Serial.println(clientAction(header,"D2")); // Do some action here instead of print...
-	     Serial.println(clientAction(header,"D3")); // Do some action here instead of print...
+			Serial.println(clientAction(header,"D1")); // Do some action here instead of print...
+			Serial.println(clientAction(header,"D2")); // Do some action here instead of print...
+			Serial.println(clientAction(header,"D3")); // Do some action here instead of print...
 			
             // Display the HTML web page
             client.println(pageHead());
@@ -194,9 +205,9 @@ void webServerListen() {
             // Web Page Heading
             client.println("<body><h1>EURO5K Alarm Web Server</h1>");
             
-	    client.println(pageButton("D1", !digitalRead(D1))); 
-	    client.println(pageButton("D2", !digitalRead(D2)));
-	    client.println(pageButton("D3", !digitalRead(D3)));
+			client.println(pageButton("D1", !digitalRead(D1))); 
+			client.println(pageButton("D2", !digitalRead(D2)));
+			client.println(pageButton("D3", !digitalRead(D3)));
 			
             client.println("</body></html>");
             
