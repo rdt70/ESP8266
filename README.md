@@ -1,9 +1,9 @@
 # ESP8266
 ESP NodeMcu as alarm info detection and sharing on IFTTT. (require IFTTT account and a WebHook + Alarm item)
 Also it expose the pin status on a web server. First 3 pins used.
-D1 indicate Alarm Detection 
-D2 indicate Alarm Armed
-D3 Failure (like power off) detection
+ - D1 used for Alarm Detection 
+ - D2 used for Alarm Armed
+ - D3 used for Failure (like power off) detection
 
 This prototype is for Lince EURO5K but can be adapted to many other alarm systems
 
