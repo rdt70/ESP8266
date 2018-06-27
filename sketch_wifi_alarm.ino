@@ -168,6 +168,24 @@ String clientAction(String header, String action)  {
 	
 } // clientAction
 
+String readValue(String header, String parameter)  {
+// Include here any action required on specific input from client
+	String value = ""; 
+	int start = 0;
+	int end = 0;
+	int length = header.length();
+	int found = header.indexOf(parameter);
+	
+	if (found >= 0) {
+		start = header.indexOf("=", found); // start
+		end = max(header.indexOf("&", found), length); //end
+		value = header.substring(start, end); 
+		Serial.println(parameter + "=" + value);
+	}
+
+	return value;	
+} // readValue
+
 // =================== Web Server ===========================
 void webServerListen() {
   // Variable to store the HTTP request
