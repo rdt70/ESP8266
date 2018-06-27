@@ -177,9 +177,9 @@ String readValue(String header, String parameter)  {
 	int found = header.indexOf(parameter);
 	
 	if (found >= 0) {
-		start = header.indexOf("=", found); // start
-		end = max(header.indexOf("&", found), length); //end
-		value = header.substring(start, end); 
+		start = header.indexOf("=", found + 1); // start
+		end = max(header.indexOf("&", found + 1), length); //end
+		value = header.substring(start + 1, end); 
 		Serial.println(parameter + "=" + value);
 	}
 
