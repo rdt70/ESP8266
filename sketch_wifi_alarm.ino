@@ -91,8 +91,6 @@ void sendAlarmtoIFTTT (String event) {
   	/*
 	Example of POST data
 	String PostData = "value1=192.168.1.1&value2=param2Value&value3=param3Value"; //Parameters here
-	// client.println("POST /posts HTTP/1.1");
-	// client.println("Host: jsonplaceholder.typicode.com");
 	client.print(String("POST ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n")
 	client.println("Cache-Control: no-cache");
 	client.println("Content-Type: application/x-www-form-urlencoded");
