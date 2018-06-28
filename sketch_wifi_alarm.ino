@@ -121,7 +121,7 @@ void sendPOSTAlarmtoIFTTT (String event) {
 	client.println(PostData.length()); 	// example should be 56
 	client.println();					//required before data
 	client.println(PostData);
-	client.println(); 					// added to verify if close the request
+	client.println(); 					// ----- added to verify if close the request
 	
 	delay(10);
 
