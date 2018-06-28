@@ -113,14 +113,16 @@ void sendPOSTAlarmtoIFTTT (String event) {
   	Serial.println("Connection Established");
   	// from : https://github.com/esp8266/Arduino/issues/1390
 	String PostData = "value1=192.168.1.1&value2=param2Value&value3=param3Value"; //Parameters here
-	client.print(String("POST ") + urlIFTTT + " HTTP/1.1")
+	client.println(String("POST ") + urlIFTTT + " HTTP/1.1")
 	client.println("Host: " + host)
-	client.println("Cache-Control: no-cache");
+	//client.println("Cache-Control: no-cache");	// not required
 	client.println("Content-Type: application/x-www-form-urlencoded");
-	client.print("Content-Length: "); client.println(PostData.length()); 
-	client.println();
+	client.print("Content-Length: "); 
+	client.println(PostData.length()); 	// example should be 56
+	client.println();					//required before data
 	client.println(PostData);
-		
+	client.println(); 					// added to verify if close the request
+	
 	delay(10);
 
   	// Read all the lines of the reply from server and print them to Serial
