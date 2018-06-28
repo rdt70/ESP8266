@@ -86,20 +86,41 @@ void sendAlarmtoIFTTT (String event) {
     		return;
   	}
   	Serial.println("Connection Established");
-  	// This will send the request to the server [to replace with POST to pass IP]
+  	// This will send the request to the server
   	client.print(String("GET ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
-  	/*
-	Example of POST data
+
+	delay(10);
+
+  	// Read all the lines of the reply from server and print them to Serial
+  	while(client.available()){
+    		String line = client.readStringUntil('\r');
+    		Serial.print(line);
+  	}
+}
+
+// =================== Send POST Alarm to IFTTT ===========================
+void sendPOSTAlarmtoIFTTT (String event) {
+	WiFiClient client;
+  	const char* host = "maker.ifttt.com";
+	String urlIFTTT = String("/trigger/") + event + "/with/key/" + IFTTT_key;
+
+	checkWiFiConnect(); // to verify still connected to WiFi
+	
+	if (!client.connect(host, 80)) {
+    		Serial.println("connection failed");
+    		return;
+  	}
+  	Serial.println("Connection Established");
+  	// from : https://github.com/esp8266/Arduino/issues/1390
 	String PostData = "value1=192.168.1.1&value2=param2Value&value3=param3Value"; //Parameters here
-	client.print(String("POST ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n")
+	client.print(String("POST ") + urlIFTTT + " HTTP/1.1")
+	client.println("Host: " + host)
 	client.println("Cache-Control: no-cache");
 	client.println("Content-Type: application/x-www-form-urlencoded");
-	client.print("Content-Length: ");  //forse non serve
-	client.println(PostData.length()); //forse non serve
+	client.print("Content-Length: "); client.println(PostData.length()); 
 	client.println();
 	client.println(PostData);
-	*/
-	
+		
 	delay(10);
 
   	// Read all the lines of the reply from server and print them to Serial
