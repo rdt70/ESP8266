@@ -35,6 +35,8 @@ const int led = D4;
 bool armedSent = 0;
 bool alarmSent = 0;
 bool failureSent = 0;
+String myLocalIP = "0.0.0.0";
+
 
 WiFiClient wifiClient;
 
@@ -70,7 +72,9 @@ void checkWiFiConnect() {
 	Serial.println("");
 	Serial.println("WiFi connected");  
 	Serial.println("IP address: ");
-	Serial.println(WiFi.localIP());
+	
+  // localIP = String(WiFi.localIP()[0]) + "." + String(WiFi.localIP()[1]) + "." + String(WiFi.localIP()[2]) + "." + String(WiFi.localIP()[3]);
+  Serial.println(WiFi.localIP());
 }
 
 // =================== Send Alarm to IFTTT ===========================
@@ -78,7 +82,7 @@ void sendAlarmtoIFTTT (String event) {
 	WiFiClient client;
   	const char* host = "maker.ifttt.com";
 	String urlIFTTT = String("/trigger/") + event + "/with/key/" + IFTTT_key;
-
+	
 	checkWiFiConnect(); // to verify still connected to WiFi
 	
 	if (!client.connect(host, 80)) {
@@ -86,10 +90,11 @@ void sendAlarmtoIFTTT (String event) {
     		return;
   	}
   	Serial.println("Connection Established");
-  	// This will send the request to the server
-  	client.print(String("GET ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
+	// Serial.println(urlIFTTT);
+  	// This will send the request to the server -- GET works...testing POST!
+  	client.print(String("GET ") + urlIFTTT + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" +  "Connection: close\r\n\r\n");
 
-	delay(10);
+  	delay(10);
 
   	// Read all the lines of the reply from server and print them to Serial
   	while(client.available()){
@@ -98,39 +103,6 @@ void sendAlarmtoIFTTT (String event) {
   	}
 }
 
-// =================== Send POST Alarm to IFTTT ===========================
-void sendPOSTAlarmtoIFTTT (String event) {
-	WiFiClient client;
-  	const char* host = "maker.ifttt.com";
-	String urlIFTTT = String("/trigger/") + event + "/with/key/" + IFTTT_key;
-
-	checkWiFiConnect(); // to verify still connected to WiFi
-	
-	if (!client.connect(host, 80)) {
-    		Serial.println("connection failed");
-    		return;
-  	}
-  	Serial.println("Connection Established");
-  	// from : https://github.com/esp8266/Arduino/issues/1390
-	String PostData = "value1=192.168.1.1&value2=param2Value&value3=param3Value"; //Parameters here
-	client.println(String("POST ") + urlIFTTT + " HTTP/1.1")
-	client.println("Host: " + host)
-	//client.println("Cache-Control: no-cache");	// not required
-	client.println("Content-Type: application/x-www-form-urlencoded");
-	client.print("Content-Length: "); 
-	client.println(PostData.length()); 	// example should be 56
-	client.println();					//required before data
-	client.println(PostData);
-	client.println(); 					// ----- added to verify if close the request
-	
-	delay(10);
-
-  	// Read all the lines of the reply from server and print them to Serial
-  	while(client.available()){
-    		String line = client.readStringUntil('\r');
-    		Serial.print(line);
-  	}
-}
 
 String pageHead() {
 	String htmlHead ="";
@@ -168,44 +140,25 @@ String pageButton(String pinName, int OnOff) {
 		break;
 	}
 
-  Serial.println(buttonStr);
 	return buttonStr;
 	
 } // pageButton
 
-String clientAction(String header, String action)  {
+String clientAction(String header, String pinOut)  {
 // Include here any action required on specific input from client
 	String outputState = ""; 
 
-	if (header.indexOf("GET /" + action +"/ON") >= 0) {
-        Serial.println(action + " ON");
+	if (header.indexOf("GET /" + pinOut +"/ON") >= 0) {
+        Serial.println(pinOut + " ON");
         outputState = "ON";
 	}
-	if (header.indexOf("GET /" + action +"/OFF") >= 0) {
-        Serial.println(action + " OFF");
+	if (header.indexOf("GET /" + pinOut +"/OFF") >= 0) {
+        Serial.println(pinOut + " OFF");
         outputState = "OFF";
 	}
 	return outputState;
 	
 } // clientAction
-
-String readValue(String header, String parameter)  {
-// Include here any action required on specific input from client
-	String value = ""; 
-	int start = 0;
-	int end = 0;
-	int length = header.length();
-	int found = header.indexOf(parameter);
-	
-	if (found >= 0) {
-		start = header.indexOf("=", found + 1); // start
-		end = max(header.indexOf("&", found + 1), length); //end
-		value = header.substring(start + 1, end); 
-		Serial.println(parameter + "=" + value);
-	}
-
-	return value;	
-} // readValue
 
 // =================== Web Server ===========================
 void webServerListen() {
@@ -234,9 +187,9 @@ void webServerListen() {
             client.println();
             
 	     // Analize the client query
-			Serial.println(clientAction(header,"button1")); // Do some action here instead of print...
-			Serial.println(clientAction(header,"button2")); // Do some action here instead of print...
-			Serial.println(clientAction(header,"button3")); // Do some action here instead of print...
+		Serial.println(clientAction(header,"D1")); // Do some action here instead of print...
+	     Serial.println(clientAction(header,"D2")); // Do some action here instead of print...
+	     Serial.println(clientAction(header,"D3")); // Do some action here instead of print...
 			
             // Display the HTML web page
             client.println(pageHead());
@@ -271,32 +224,33 @@ void webServerListen() {
   }
 } // webServerListen
 
-
+void blickLed(){
+  digitalWrite(led, LOW);
+  delay(1000);
+  digitalWrite(led, HIGH);
+}
 // ======================= Check the Alarm Status ============================
 void checkAlarm() {
   // put your main code here, to run repeatedly:
-
-  digitalWrite(led, LOW);
-  
-  delay(1000);
   
   bool OnAlarm  = !digitalRead(AlarmIntrusionPin);
   bool Armed    = !digitalRead(AlarmArmedPin);
   bool Failure  = !digitalRead(AlarmFailurePin);
 
   Serial.print("PIN D1 = "); Serial.print(!OnAlarm);
-  
   //============= Check if alarm raised
   if (OnAlarm && !alarmSent) {
         Serial.println("Centrale ALLARME!");
+        blickLed();
         sendAlarmtoIFTTT(IFTTT_Event_Alarm);
-         alarmSent = 1;  //Remember if already sent to avoid sending twice
+        alarmSent = 1;  //Remember if already sent to avoid sending twice
   } else { alarmSent = OnAlarm; } // alarmSent = 0 se non allarme altrimenti rimane 1
   Serial.println();
 
   //============= Check if alarm armed
   Serial.print("PIN D2 = "); Serial.print(!Armed);
   if (Armed && !armedSent) {
+       blickLed();
        Serial.println("Centrale Inserita!");
       sendAlarmtoIFTTT(IFTTT_Event_Armed); 
       armedSent = 1;    //Remember if already sent to avoid sending twice
@@ -312,6 +266,7 @@ void checkAlarm() {
   //============= Check if failure (for example if no power)
   Serial.print("PIN D3 = "); Serial.print(!Failure);
   if (Failure && !failureSent) {
+        blickLed();
         Serial.println("FAILURE!");
         sendAlarmtoIFTTT(IFTTT_Event_Failure); 
         failureSent = 1; //Remember if already sent to avoid sending twice
@@ -323,12 +278,13 @@ void checkAlarm() {
   
   Serial.println("-------------------");
   
-  digitalWrite(led, HIGH);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
+  delay(1000);
+  
   checkAlarm();
   
   delay(2000);
