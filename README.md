@@ -11,4 +11,22 @@ NOTE: the simple wifi client and server has been used instead of HTTP class beca
 
 ![Web Server](https://github.com/rdt70/ESP8266/blob/master/Images/EURO5K.png)
 
+##Cabling
+Power
+	20 (AUX) / 21 (GND) -------------- [step-down 12v-3,3v]------------------- Pin 3,3v/GND
+
+Failure
+	Ok = not connected / Failure = GND
+	22 (OUT) ----------------------------------------------------------------- D4 Pin (INPUT_PULLUP)
+
+Armed
+	Nothing = +12v /  Armed -> Not connected [=> require voltage divider]
+	32[+OFF] --------- [1KOhm]------+------- [330Ohm] ----- GND [21]
+			   12v					|				3v
+									+----------------------------------------- D2 Pin (INPUT) [ voltage divider or step-down]
+Alarm 
+	Nothing = not connected / On Alarm = (NA connected to C) 
+	27 (C) 		----------- GND [21]
+	26 (NA) 	------------------------------------------------------------ D3 Pin (INPUT_PULLUP)
+
 
