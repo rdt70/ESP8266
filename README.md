@@ -11,7 +11,7 @@ NOTE: the simple wifi client and server has been used instead of HTTP class beca
 
 ![Web Server](https://github.com/rdt70/ESP8266/blob/master/Images/EURO5K.png)
 
-##Cabling
+## Cabling
 Power
 	20 (AUX) / 21 (GND) -------------- [step-down 12v-3,3v]------------------- Pin 3,3v/GND
 
