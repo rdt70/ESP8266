@@ -11,5 +11,3 @@ NOTE: the simple wifi client and server has been used instead of HTTP class beca
 
 ![Web Server](https://github.com/rdt70/ESP8266/blob/master/Images/EURO5K.png)
 
-
-This is a new line
